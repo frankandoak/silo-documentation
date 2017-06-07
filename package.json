@@ -1,0 +1,13 @@
+{
+  "name": "silo-documentation",
+  "version": "1.0.0",
+  "description": "Provide a documentation endpoint",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Moreau <david.moreau@frankandoak.com>",
+  "main": "client/index.js",
+  "dependencies": {
+    "silo-core": "*"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "frankandoak/silo-documentation",
+  "description": "Markdown documentation service",
+  "type": "silo module",
+  "authors": [
+    {
+      "name": "David Moreau",
+      "email": "david.moreau@frankandoak.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Silo\\Documentation\\" : "server"
+    }
+  }
+}
