@@ -28,7 +28,7 @@ module.exports = React.createClass({
             return out;
         };
         renderer.image = function(href, title, text) {
-            let out = '<img src="' + page+'/'+href + '" class="img-thumbnail img-responsive center-block" alt="' + text + '"';
+            let out = '<img src="/silo' + page+'/'+href + '" class="img-thumbnail img-responsive center-block" alt="' + text + '"';
             if (title) {
                 out += ' title="' + title + '"';
             }

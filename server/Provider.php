@@ -22,14 +22,14 @@ class Provider implements ServiceProviderInterface
             $app->get("/silo/doc$mountPoint{path}", function($path)use($app,$realPath){
                 $file = null;
                 if ($realPath) {
-                    $file = $realPath.$path.'.md';
+                    $file = $realPath.$path;
                     $dir = $realPath.$path;
 
                     if (file_exists($dir) && is_dir($dir)) {
                         $dir .= strrpos($dir, '/') == strlen($dir) - 1 ? '' : '/';
                         $file = $dir.'index.md';
                     }
-                    $file = file_exists($file)?$file:null;
+                    $file = file_exists($file)?$file:(file_exists($file.'.md')?$file.'.md':null);
                 }
 
                 $response = new JsonResponse([
