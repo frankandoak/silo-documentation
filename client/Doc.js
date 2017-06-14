@@ -35,6 +35,16 @@ module.exports = React.createClass({
             out += this.options.xhtml ? '/>' : '>';
             return out;
         };
+        renderer.table = function(header, body) {
+            return '<table class="table table-bordered">\n'
+                + '<thead>\n'
+                + header
+                + '</thead>\n'
+                + '<tbody>\n'
+                + body
+                + '</tbody>\n'
+                + '</table>\n';
+        };
 
 
         return {
