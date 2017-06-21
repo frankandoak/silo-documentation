@@ -1,7 +1,6 @@
 {
   "name": "frankandoak/silo-documentation",
-  "description": "Markdown documentation service",
-  "type": "silo module",
+  "description": "Documentation module for Silo",
   "authors": [
     {
       "name": "David Moreau",
