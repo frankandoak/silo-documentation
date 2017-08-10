@@ -5,9 +5,21 @@ const marked = require('marked');
 
 module.exports = React.createClass({
 
-    getInitialState: function(){
-        const page = '/doc'+this.props.page;
+    propTypes: {
+        page: React.PropTypes.string.isRequired,
+        basePath: React.PropTypes.string.isRequired
+    },
 
+    getInitialState: function(){
+        return {
+            content: "",
+            renderer: null
+        };
+    },
+
+    componentDidMount: function(){
+        let page = this.props.page ? this.props.page : "";
+        let basePath = this.props.basePath;
         let renderer = new marked.Renderer();
         renderer.link = function(href, title, text) {
             let out = '<a';
@@ -17,8 +29,8 @@ module.exports = React.createClass({
                 if (text.startsWith('&gt;')) {
                     out += ' target="_blank" href="/#!'+ href +'"';
                 } else {
-                    let link = page+'/'+href.replace(/\.md/i, '');
-                    out += ' onclick="A.Page.Open(\''+link+'\'); return false;" href="/#!'+link+'"';
+                    let link = page+href.replace(/\.md/i, '');
+                    out += ' href="#'+basePath+link+'"';
                 }
             }
             if (title) {
@@ -28,7 +40,8 @@ module.exports = React.createClass({
             return out;
         };
         renderer.image = function(href, title, text) {
-            let out = '<img src="/silo' + page+'/'+href + '" class="img-thumbnail img-responsive center-block" alt="' + text + '"';
+            let out = '<img src="/silo/doc' + page+'/'+href + '" class="img-thumbnail img-responsive center-block"' +
+                ' alt="' + text + '"';
             if (title) {
                 out += ' title="' + title + '"';
             }
@@ -46,21 +59,14 @@ module.exports = React.createClass({
                 + '</table>\n';
         };
 
-
-        return {
-            content: "",
-            renderer: renderer
-        };
-    },
-
-    componentDidMount: function(){
-        let page = this.props.page;
-        let basePath = "/silo/doc";
         $.ajax(
-            basePath+page,
+            "/silo/doc"+page,
             {
                 success: function(data){
-                    this.setState({content: data.content});
+                    this.setState({
+                        content: data.content,
+                        renderer: renderer
+                    });
                 }.bind(this),
                 headers: {'Accept': 'application/json'}
             }
@@ -69,23 +75,24 @@ module.exports = React.createClass({
 
     render: function(){
         let breadcrumbs = [];
-        if (this.props.page.length){
+        if (this.props.page && this.props.page.length){
             this.props.page.substr(1).split('/').forEach((p, k)=>{
                 let last = k - 1 >= 0 ? breadcrumbs[k-1].url:"";
                 breadcrumbs.push({url:last+'/'+p, name:p});
             });
             breadcrumbs.pop();
         }
+
         return (
             <Grid>
                 <Row>
                     <Col xs={12} md={8} mdOffset={2}>
 
                         <Breadcrumb>
-                            <Breadcrumb.Item onClick={()=>{A.Page.Open('/doc');}}>
+                            <Breadcrumb.Item href="#!/doc">
                                 Doc Home
                             </Breadcrumb.Item>
-                            {breadcrumbs.map((breadcrumb)=><Breadcrumb.Item key={breadcrumb.name} onClick={()=>{A.Page.Open('/doc'+breadcrumb.url);}}>
+                            {breadcrumbs.map((breadcrumb)=><Breadcrumb.Item key={breadcrumb.name} onClick={()=>{A.Page.Open('!/doc'+breadcrumb.url);}}>
                                 {breadcrumb.name[0].toUpperCase()+breadcrumb.name.substr(1)}
                             </Breadcrumb.Item>)}
                         </Breadcrumb>
